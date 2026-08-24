@@ -52,7 +52,6 @@ export default function CategoryPage() {
       setMessage("");
       setIsSubmitting(true);
 
-      // 1. Upload video and create the word
       const formData = new FormData();
 
       formData.append(
@@ -75,7 +74,6 @@ export default function CategoryPage() {
         );
       }
 
-      // 2. Update the word name and assign category
       await privateApi.put(
         `/v1/admin/Words/${newWordId}`,
         {
@@ -86,7 +84,6 @@ export default function CategoryPage() {
         }
       );
 
-      // 3. Clear the form
       setWordName("");
       setVideoFile(null);
 
@@ -98,7 +95,6 @@ export default function CategoryPage() {
         "Word added successfully."
       );
 
-      // 4. Reload category
       await loadCategory();
     } catch (error) {
       console.error(
