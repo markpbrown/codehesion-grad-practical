@@ -6,7 +6,6 @@ import HomePage from "./pages/Home";
 import LoginPage from "./pages/Login";
 import NotFoundPage from "./pages/NotFound";
 import RegisterPage from "./pages/Register";
-import WordPage from "./pages/Word";
 import ProfilePage from "./pages/Profile"
 import TagsPage from "./pages/Tags"
 
@@ -27,10 +26,10 @@ export default function App() {
             element={<CategoryPage />}
           />
 
-          <Route
+          {/* <Route
             path="/categories/:categoryId/words/:wordId"
             element={<WordPage />}
-          />
+          /> */}
 
           <Route
             path="/register"
