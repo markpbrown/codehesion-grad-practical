@@ -35,10 +35,7 @@ export default function LoginPage() {
 
       body.append("grant_type", "password");
       body.append("client_id", import.meta.env.VITE_CLIENT_ID);
-      body.append(
-        "client_secret",
-        import.meta.env.VITE_CLIENT_SECRET
-      );
+      body.append("client_secret", import.meta.env.VITE_CLIENT_SECRET);
       body.append("scope", import.meta.env.VITE_SCOPE);
       body.append("username", values.email);
       body.append("password", values.password);
@@ -61,7 +58,7 @@ export default function LoginPage() {
       const message =
         error.response?.data?.error_description ||
         error.response?.data?.message ||
-        "Login failed. Check your email and password.";
+        "Login failed.";
 
       setStatus(message);
     } finally {

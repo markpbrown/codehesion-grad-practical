@@ -127,10 +127,11 @@ export default function RegisterPage() {
               <div className="form-group">
                 <label htmlFor="role">Role</label>
 
-                <Field id="role" name="role" as="select">
-                  <option value="Administrator">
-                    Administrator
-                  </option>
+                <Field 
+                  id="role"
+                  name="role"
+                  type="text"
+                  placeholder="Admin">
                 </Field>
 
                 <ErrorMessage

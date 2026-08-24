@@ -91,7 +91,7 @@ export default function HomePage() {
                 <p>{category.description}</p>
               )}
 
-              <span>View words →</span>
+              <span>View words</span>
             </Link>
           ))}
         </div>
