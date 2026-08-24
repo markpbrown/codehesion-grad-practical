@@ -6,9 +6,7 @@
 
 body {
   margin: 0;
-
   font-family: Arial, Helvetica, sans-serif;
-
   background: #f5f5f5;
   color: #222;
 }
@@ -43,7 +41,6 @@ input {
 .brand {
   color: #222;
   text-decoration: none;
-
   font-size: 18px;
   font-weight: bold;
 }
@@ -57,7 +54,6 @@ input {
 .nav-link {
   color: #666;
   text-decoration: none;
-
   font-size: 14px;
 }
 
@@ -94,11 +90,10 @@ input {
 }
 
 
-/* PAGE */
+/* NORMAL PAGES */
 
 .page {
   max-width: 1100px;
-
   margin: 0 auto;
   padding: 35px 20px;
 }
@@ -109,13 +104,11 @@ input {
 
 .page-heading h1 {
   margin: 0;
-
   font-size: 26px;
 }
 
 .page-heading p {
   margin: 6px 0 0;
-
   color: #666;
   font-size: 14px;
 }
@@ -125,14 +118,12 @@ input {
 
 .card-grid {
   display: grid;
-
-  grid-template-columns:
-    repeat(auto-fit, minmax(220px, 1fr));
-
+  grid-template-columns: repeat(auto-fit, minmax(220px, 1fr));
   gap: 15px;
 }
 
 .category-card {
+  display: block;
   padding: 20px;
 
   background: white;
@@ -146,24 +137,22 @@ input {
 
 .category-card:hover {
   border-color: #aaa;
+  background: #fafafa;
 }
 
 .category-card h2 {
   margin: 0 0 10px;
-
   font-size: 18px;
 }
 
 .category-card p {
   margin: 0 0 15px;
-
   color: #666;
   font-size: 14px;
 }
 
 .category-card span {
   display: block;
-
   margin-top: 20px;
 
   color: #555;
@@ -171,36 +160,78 @@ input {
 }
 
 
-/* FORMS */
+/* LOGIN / REGISTER PAGE */
 
-form {
-  max-width: 400px;
+.auth-page {
+  min-height: 100vh;
+
+  display: flex;
+  align-items: center;
+  justify-content: center;
+
+  padding: 30px 20px;
 }
 
-label {
-  display: block;
+.form-card {
+  width: 100%;
+  max-width: 400px;
 
-  margin-bottom: 5px;
+  padding: 30px;
+
+  background: white;
+
+  border: 1px solid #ddd;
+  border-radius: 6px;
+}
+
+.form-card h1 {
+  margin: 0 0 6px;
+  font-size: 26px;
+}
+
+.form-card > p {
+  margin: 0 0 25px;
+  color: #666;
+  font-size: 14px;
+}
+
+
+/* FORMS */
+
+.form-card form {
+  width: 100%;
+}
+
+.form-group {
+  margin-bottom: 18px;
+}
+
+.form-group label {
+  display: block;
+  margin-bottom: 6px;
 
   font-size: 14px;
   font-weight: bold;
 }
 
-input {
+.form-group input {
   width: 100%;
-
-  padding: 10px;
-  margin-bottom: 15px;
+  padding: 10px 12px;
 
   background: white;
+  color: #222;
 
   border: 1px solid #ccc;
   border-radius: 5px;
 }
 
-input:focus {
+.form-group input:focus {
   outline: none;
   border-color: #777;
+}
+
+.form-group input::placeholder {
+  color: #999;
 }
 
 
@@ -227,12 +258,17 @@ button:disabled {
   cursor: not-allowed;
 }
 
+.form-card button {
+  width: 100%;
+  margin-top: 5px;
+}
+
 
 /* WORD LIST */
 
 .word-list {
   padding: 0;
-  margin-top: 20px;
+  margin: 20px 0 0;
 
   list-style: none;
 }
@@ -249,17 +285,55 @@ button:disabled {
   display: flex;
   align-items: center;
   justify-content: space-between;
+  gap: 15px;
 }
 
 
 /* MESSAGES */
 
+.field-error {
+  margin: 5px 0 0;
+  color: #b42318;
+  font-size: 13px;
+}
+
 .form-error {
+  margin: 10px 0;
   color: #b42318;
   font-size: 14px;
 }
 
 .success-message {
+  margin: 10px 0;
   color: #287a3d;
   font-size: 14px;
+}
+
+
+/* MOBILE */
+
+@media (max-width: 600px) {
+  .header {
+    height: auto;
+    padding: 15px;
+
+    align-items: flex-start;
+    gap: 15px;
+  }
+
+  .navigation {
+    gap: 10px;
+  }
+
+  .page {
+    padding: 25px 15px;
+  }
+
+  .card-grid {
+    grid-template-columns: 1fr;
+  }
+
+  .form-card {
+    padding: 25px;
+  }
 }
