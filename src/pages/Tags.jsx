@@ -2,20 +2,8 @@ import { useEffect, useState } from "react";
 import { privateApi } from "../api/api";
 
 function getArrayFromResponse(data) {
-  if (Array.isArray(data)) {
-    return data;
-  }
-
-  if (Array.isArray(data?.items)) {
-    return data.items;
-  }
-
-  if (Array.isArray(data?.data)) {
-    return data.data;
-  }
-
-  if (Array.isArray(data?.results)) {
-    return data.results;
+  if (Array.isArray(data?.data?.items)) {
+    return data.data.items;
   }
 
   return [];
@@ -38,6 +26,8 @@ export default function TagsPage() {
 
   async function loadTags() {
     try {
+      setError("");
+
       const response = await privateApi.get(
         "/v1/admin/Tags"
       );
@@ -48,7 +38,11 @@ export default function TagsPage() {
 
       setTags(tagList);
     } catch (error) {
-      console.error(error);
+      console.error(
+        "Load tags error:",
+        error.response?.data
+      );
+
       setError("Could not load tags.");
     }
   }
@@ -65,13 +59,15 @@ export default function TagsPage() {
       setError("");
       setMessage("");
 
+      const tagData = {
+        name: name.trim(),
+        color,
+      };
+
       if (editingId) {
         await privateApi.put(
-          `/admin/Tags/${editingId}`,
-          {
-            name,
-            color,
-          }
+          `v1/admin/Tags/${editingId}`,
+          tagData
         );
 
         setMessage("Tag updated.");
@@ -80,7 +76,7 @@ export default function TagsPage() {
           "/v1/admin/Tags",
           {
             name,
-            color,
+            color
           }
         );
 
@@ -91,9 +87,17 @@ export default function TagsPage() {
       setColor("#777777");
       setEditingId(null);
 
-      loadTags();
+      await loadTags();
     } catch (error) {
-      console.error(error);
+      console.error(
+        "Status:",
+        error.response?.status
+      );
+
+      console.error(
+        "Data:",
+        error.response?.data
+      );
 
       setError(
         error.response?.data?.message ||
@@ -108,8 +112,8 @@ export default function TagsPage() {
     setName(tag.name || "");
     setColor(tag.color || "#777777");
 
-    setMessage("");
     setError("");
+    setMessage("");
   }
 
   function handleCancelEdit() {
@@ -117,6 +121,9 @@ export default function TagsPage() {
 
     setName("");
     setColor("#777777");
+
+    setError("");
+    setMessage("");
   }
 
   async function handleDelete(id) {
@@ -130,9 +137,12 @@ export default function TagsPage() {
 
       setMessage("Tag deleted.");
 
-      loadTags();
+      await loadTags();
     } catch (error) {
-      console.error(error);
+      console.error(
+        "Delete error:",
+        error.response?.data
+      );
 
       setError(
         error.response?.data?.message ||
