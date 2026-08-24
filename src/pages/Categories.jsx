@@ -32,14 +32,7 @@ export default function CategoryPage() {
         `/v1/admin/categories/${categoryId}`
       );
 
-      console.log(
-        "Category response:",
-        response.data
-      );
-
-      const categoryData =
-        response.data?.data ??
-        response.data;
+      const categoryData = response.data?.data;
 
       setCategory(categoryData);
     } catch (error) {
@@ -52,20 +45,9 @@ export default function CategoryPage() {
   }
 
   function getCreatedWordId(data) {
-    if (data?.id) {
-      return data.id;
-    }
 
     if (data?.data?.id) {
       return data.data.id;
-    }
-
-    if (data?.wordId) {
-      return data.wordId;
-    }
-
-    if (data?.data?.wordId) {
-      return data.data.wordId;
     }
 
     return null;

@@ -1,12 +1,10 @@
 import { useEffect, useState } from "react";
 import { privateApi } from "../api/api";
 
-function getArrayFromResponse(data) {
-  if (Array.isArray(data?.data?.items)) {
-    return data.data.items;
-  }
-
-  return [];
+function getValidColor(color) {
+  return /^#[0-9A-Fa-f]{6}$/.test(color)
+    ? color
+    : "#777777";
 }
 
 export default function TagsPage() {
@@ -26,23 +24,13 @@ export default function TagsPage() {
 
   async function loadTags() {
     try {
-      setError("");
-
       const response = await privateApi.get(
         "/v1/admin/Tags"
       );
 
-      const tagList = getArrayFromResponse(
-        response.data
-      );
-
-      setTags(tagList);
+      setTags(response.data.data.items);
     } catch (error) {
-      console.error(
-        "Load tags error:",
-        error.response?.data
-      );
-
+      console.error(error);
       setError("Could not load tags.");
     }
   }
@@ -59,45 +47,31 @@ export default function TagsPage() {
       setError("");
       setMessage("");
 
-      const tagData = {
+      const tag = {
         name: name.trim(),
         color,
       };
 
       if (editingId) {
         await privateApi.put(
-          `v1/admin/Tags/${editingId}`,
-          tagData
+          `/v1/admin/Tags/${editingId}`,
+          tag
         );
 
         setMessage("Tag updated.");
       } else {
         await privateApi.post(
           "/v1/admin/Tags",
-          {
-            name,
-            color
-          }
+          tag
         );
 
         setMessage("Tag created.");
       }
 
-      setName("");
-      setColor("#777777");
-      setEditingId(null);
-
+      clearForm();
       await loadTags();
     } catch (error) {
-      console.error(
-        "Status:",
-        error.response?.status
-      );
-
-      console.error(
-        "Data:",
-        error.response?.data
-      );
+      console.error(error);
 
       setError(
         error.response?.data?.message ||
@@ -108,22 +82,17 @@ export default function TagsPage() {
 
   function handleEdit(tag) {
     setEditingId(tag.id);
-
-    setName(tag.name || "");
-    setColor(tag.color || "#777777");
+    setName(tag.name);
+    setColor(getValidColor(tag.color));
 
     setError("");
     setMessage("");
   }
 
-  function handleCancelEdit() {
+  function clearForm() {
     setEditingId(null);
-
     setName("");
     setColor("#777777");
-
-    setError("");
-    setMessage("");
   }
 
   async function handleDelete(id) {
@@ -139,10 +108,7 @@ export default function TagsPage() {
 
       await loadTags();
     } catch (error) {
-      console.error(
-        "Delete error:",
-        error.response?.data
-      );
+      console.error(error);
 
       setError(
         error.response?.data?.message ||
@@ -201,7 +167,7 @@ export default function TagsPage() {
               <button
                 type="button"
                 className="secondary-button"
-                onClick={handleCancelEdit}
+                onClick={clearForm}
               >
                 Cancel
               </button>
@@ -236,7 +202,7 @@ export default function TagsPage() {
                   className="tag-color"
                   style={{
                     backgroundColor:
-                      tag.color || "#777777",
+                      getValidColor(tag.color),
                   }}
                 />
 
