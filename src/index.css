@@ -172,8 +172,13 @@ input {
   padding: 30px 20px;
 }
 
-.form-card {
+/* .login-form{
+  max-width: 400px;
   width: 100%;
+} */
+
+.form-card {
+  width: 100%; 
   max-width: 400px;
 
   padding: 30px;
@@ -232,6 +237,15 @@ input {
 
 .form-group input::placeholder {
   color: #999;
+}
+
+.register-form {
+  max-width: 100%;
+}
+
+.form-success {
+  color: #0e9831;
+  font-size: 1.25rem;
 }
 
 

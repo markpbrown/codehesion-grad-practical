@@ -77,7 +77,7 @@ export default function RegisterPage() {
         <p>Send an invitation to a new user.</p>
       </div>
 
-      <div className="form-card">
+      <div className="form-card register-form">
         <Formik
           initialValues={{
             name: "",

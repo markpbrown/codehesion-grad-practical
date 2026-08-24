@@ -68,7 +68,7 @@ export default function LoginPage() {
 
   return (
     <main className="auth-page">
-      <section className="form-card">
+      <section className="form-card login-form">
         <h1>Login</h1>
         <p>Sign in to manage categories and users.</p>
 
