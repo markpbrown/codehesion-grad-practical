@@ -26,11 +26,6 @@ export default function App() {
             element={<CategoryPage />}
           />
 
-          {/* <Route
-            path="/categories/:categoryId/words/:wordId"
-            element={<WordPage />}
-          /> */}
-
           <Route
             path="/register"
             element={<RegisterPage />}
