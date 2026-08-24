@@ -172,11 +172,6 @@ input {
   padding: 30px 20px;
 }
 
-/* .login-form{
-  max-width: 400px;
-  width: 100%;
-} */
-
 .form-card {
   width: 100%; 
   max-width: 400px;
@@ -239,7 +234,7 @@ input {
   color: #999;
 }
 
-.register-form {
+.register-form, .profile-form{
   max-width: 100%;
 }
 

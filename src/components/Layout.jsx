@@ -36,6 +36,24 @@ export default function Layout() {
             Invite user
           </NavLink>
 
+          <NavLink
+            to="/profile"
+            className={({ isActive }) =>
+              isActive ? "nav-link active" : "nav-link"
+            }
+          >
+            Profile
+          </NavLink>
+
+          <NavLink
+            to="/tags"
+            className={({ isActive }) =>
+              isActive ? "nav-link active" : "nav-link"
+            }
+          >
+            Tags
+          </NavLink>
+
           <button
             type="button"
             className="logout-button"

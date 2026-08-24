@@ -3,10 +3,12 @@ import Layout from "./components/Layout";
 import ProtectedRoute from "./routes/ProtectedRoute";
 import CategoryPage from "./pages/Categories";
 import HomePage from "./pages/Home";
-import LoginPage from "./pages/login";
+import LoginPage from "./pages/Login";
 import NotFoundPage from "./pages/NotFound";
 import RegisterPage from "./pages/Register";
 import WordPage from "./pages/Word";
+import ProfilePage from "./pages/Profile"
+import TagsPage from "./pages/Tags"
 
 export default function App() {
   return (
@@ -33,6 +35,16 @@ export default function App() {
           <Route
             path="/register"
             element={<RegisterPage />}
+          />
+
+          <Route 
+            path="/profile"
+            element={<ProfilePage />}
+          />
+
+          <Route 
+            path="/tags"
+            element={<TagsPage />}
           />
         </Route>
       </Route>
