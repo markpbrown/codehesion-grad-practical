@@ -8,9 +8,6 @@ export const publicApi = axios.create({
 
 export const privateApi = axios.create({
   baseURL: API_URL,
-  headers: {
-    "Content-Type": "application/json",
-  },
 });
 
 privateApi.interceptors.request.use(
@@ -26,4 +23,4 @@ privateApi.interceptors.request.use(
   (error) => {
     return Promise.reject(error);
   }
-);  
+);

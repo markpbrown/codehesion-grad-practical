@@ -1,24 +1,19 @@
-import { useEffect, useState } from "react";
-import {
-  Link,
-  useParams,
-} from "react-router-dom";
-
+import { useEffect, useRef, useState } from "react";
+import { Link, useParams } from "react-router-dom";
 import { privateApi } from "../api/api";
 
 export default function CategoryPage() {
   const { categoryId } = useParams();
 
   const [category, setCategory] = useState(null);
-
   const [wordName, setWordName] = useState("");
   const [videoFile, setVideoFile] = useState(null);
 
-  const [isSubmitting, setIsSubmitting] =
-    useState(false);
-
+  const [isSubmitting, setIsSubmitting] = useState(false);
   const [error, setError] = useState("");
   const [message, setMessage] = useState("");
+
+  const fileInputRef = useRef(null);
 
   useEffect(() => {
     loadCategory();
@@ -32,25 +27,11 @@ export default function CategoryPage() {
         `/v1/admin/categories/${categoryId}`
       );
 
-      const categoryData = response.data?.data;
-
-      setCategory(categoryData);
+      setCategory(response.data.data);
     } catch (error) {
       console.error(error);
-
-      setError(
-        "Could not load category."
-      );
+      setError("Could not load category.");
     }
-  }
-
-  function getCreatedWordId(data) {
-
-    if (data?.data?.id) {
-      return data.data.id;
-    }
-
-    return null;
   }
 
   async function handleAddWord(event) {
@@ -71,65 +52,53 @@ export default function CategoryPage() {
       setMessage("");
       setIsSubmitting(true);
 
+      // 1. Upload video and create the word
       const formData = new FormData();
 
       formData.append(
         "files",
-        videoFile
+        videoFile,
+        videoFile.name
       );
 
-      const createResponse =
-        await privateApi.post(
-          "/v1/admin/Words",
-          formData
-        );
-
-      console.log(
-        "Create word response:",
-        createResponse.data
+      const createResponse = await privateApi.post(
+        "/v1/admin/Words",
+        formData
       );
 
       const newWordId =
-        getCreatedWordId(
-          createResponse.data
-        );
+        createResponse.data.data[0];
 
       if (!newWordId) {
         throw new Error(
-          "The API created the word but did not return a word ID."
+          "Could not get the new word ID."
         );
       }
 
+      // 2. Update the word name and assign category
       await privateApi.put(
         `/v1/admin/Words/${newWordId}`,
         {
           name: wordName.trim(),
+          categoryIds: [
+            Number(categoryId),
+          ],
         }
       );
 
-      await privateApi.patch(
-        `/v1/admin/categories/${categoryId}/words`,
-        {
-          wordId: newWordId,
-        }
-      );
+      // 3. Clear the form
+      setWordName("");
+      setVideoFile(null);
+
+      if (fileInputRef.current) {
+        fileInputRef.current.value = "";
+      }
 
       setMessage(
         "Word added successfully."
       );
 
-      setWordName("");
-      setVideoFile(null);
-
-      const fileInput =
-        document.getElementById(
-          "wordVideo"
-        );
-
-      if (fileInput) {
-        fileInput.value = "";
-      }
-
+      // 4. Reload category
       await loadCategory();
     } catch (error) {
       console.error(
@@ -138,15 +107,31 @@ export default function CategoryPage() {
       );
 
       console.error(
-        "API response:",
+        "API error:",
         error.response?.data
       );
 
-      setError(
-        error.response?.data?.message ||
-          error.message ||
-          "Could not add word."
-      );
+      const validationErrors =
+        error.response?.data?.errors;
+
+      if (validationErrors) {
+        const firstError =
+          Object.values(
+            validationErrors
+          )[0]?.[0];
+
+        setError(
+          firstError ||
+            "Validation failed."
+        );
+      } else {
+        setError(
+          error.response?.data?.message ||
+            error.response?.data?.error ||
+            error.message ||
+            "Could not add word."
+        );
+      }
     } finally {
       setIsSubmitting(false);
     }
@@ -166,15 +151,10 @@ export default function CategoryPage() {
     );
   }
 
-  const words =
-    category.words ??
-    category.items ??
-    category.wordItems ??
-    [];
+  const words = category.words || [];
 
   return (
     <section className="page">
-
       <Link
         to="/categories"
         className="back-link"
@@ -183,24 +163,17 @@ export default function CategoryPage() {
       </Link>
 
       <div className="page-heading">
-        <h1>
-          {category.name ||
-            category.title ||
-            `Category ${categoryId}`}
-        </h1>
+        <h1>{category.name}</h1>
 
         <p>
-          View and add words to this
-          category.
+          View and add words to this category.
         </p>
       </div>
 
       <div className="form-card page-form">
-
         <h2>Add word</h2>
 
         <form onSubmit={handleAddWord}>
-
           <div className="form-group">
             <label htmlFor="wordName">
               Word
@@ -219,24 +192,24 @@ export default function CategoryPage() {
             />
           </div>
 
-
           <div className="form-group">
             <label htmlFor="wordVideo">
               Video
             </label>
 
             <input
+              ref={fileInputRef}
               id="wordVideo"
               type="file"
               accept="video/*"
               onChange={(event) =>
                 setVideoFile(
-                  event.target.files[0]
+                  event.target.files[0] ||
+                    null
                 )
               }
             />
           </div>
-
 
           <button
             type="submit"
@@ -247,22 +220,18 @@ export default function CategoryPage() {
               : "Add word"}
           </button>
 
-
           {error && (
             <p className="form-error">
               {error}
             </p>
           )}
 
-
           {message && (
             <p className="success-message">
               {message}
             </p>
           )}
-
         </form>
-
       </div>
 
       <h2 className="section-heading">
@@ -275,27 +244,18 @@ export default function CategoryPage() {
         </p>
       ) : (
         <div className="word-list">
-
           {words.map((word) => (
             <Link
               key={word.id}
               to={`/categories/${categoryId}/words/${word.id}`}
               className="word-item"
             >
-              <span>
-                {word.name ||
-                  `Word ${word.id}`}
-              </span>
-
-              <span>
-                View
-              </span>
+              <span>{word.name}</span>
+              <span>View</span>
             </Link>
           ))}
-
         </div>
       )}
-
     </section>
   );
 }

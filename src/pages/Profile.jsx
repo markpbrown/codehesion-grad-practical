@@ -58,18 +58,14 @@ export default function ProfilePage() {
           initialValues={{
             name:
               user.name ??
-              user.firstName ??
               "",
 
             lastName:
               user.lastName ??
-              user.lastname ??
-              user.surname ??
               "",
 
             email:
               user.email ??
-              user.emailAddress ??
               "",
           }}
           onSubmit={handleSubmit}
