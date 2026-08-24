@@ -1,12 +1,12 @@
 import { Navigate, Route, Routes } from "react-router-dom";
 import Layout from "./components/Layout";
 import ProtectedRoute from "./routes/ProtectedRoute";
+import CategoryPage from "./pages/Categories";
+import HomePage from "./pages/Home";
 import LoginPage from "./pages/login";
+import NotFoundPage from "./pages/NotFound";
 import RegisterPage from "./pages/Register";
-
-function TemporaryHome() {
-  return <h1>Categories coming next</h1>;
-}
+import WordPage from "./pages/Word";
 
 export default function App() {
   return (
@@ -17,7 +17,17 @@ export default function App() {
         <Route element={<Layout />}>
           <Route
             path="/categories"
-            element={<TemporaryHome />}
+            element={<HomePage />}
+          />
+
+          <Route
+            path="/categories/:categoryId"
+            element={<CategoryPage />}
+          />
+
+          <Route
+            path="/categories/:categoryId/words/:wordId"
+            element={<WordPage />}
           />
 
           <Route
@@ -31,6 +41,8 @@ export default function App() {
         path="/"
         element={<Navigate to="/categories" replace />}
       />
+
+      <Route path="*" element={<NotFoundPage />} />
     </Routes>
   );
 }
